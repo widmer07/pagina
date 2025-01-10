@@ -1,60 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Example</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden; /* Oculta el scroll */
-        }
-        canvas {
-            display: block; /* Asegura que el canvas ocupe todo el espacio */
-        }
-    </style>
-</head>
-<body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    <script>
-        // Configuración básica de la escena
-        const scene = new THREE.Scene();
-
-        // Configuración de la cámara
-        const camera = new THREE.PerspectiveCamera(
-            75, // Campo de visión (FOV)
-            window.innerWidth / window.innerHeight, // Relación de aspecto
-            0.1, // Plano cercano
-            1000 // Plano lejano
-        );
-
-        // Configuración del renderizador
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement); // Agrega el canvas al DOM
-
-        // Crear un cubo
-        const geometry = new THREE.BoxGeometry(); // Geometría del cubo
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Material del cubo (verde)
-        const cube = new THREE.Mesh(geometry, material); // Malla que combina geometría y material
-        scene.add(cube); // Agrega el cubo a la escena
-
-        // Posición inicial de la cámara
-        camera.position.z = 5;
-
-        // Función de animación
-        function animate() {
-            requestAnimationFrame(animate); // Llama a la función en el siguiente frame
-
-            // Rotación del cubo
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-
-            // Renderiza la escena desde la perspectiva de la cámara
-            renderer.render(scene, camera);
-        }
-
-        animate(); // Inicia la animación
-    </script>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <script type="text/javascript" src="../lib/three.js"></script>
+        
+        <script type="text/javascript">
+            function init() {
+                var renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('mainCanvas')
+                });
+                renderer.setClearColor(0x000000); // black
+                
+                var scene = new THREE.Scene();
+                
+                var camera = new THREE.PerspectiveCamera(45, 4 / 3, 1, 1000);
+                camera.position.set(0, 0, 5);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+                scene.add(camera);
+                
+                var material = new THREE.MeshBasicMaterial({
+                        color: 0xffffff // white
+                });
+                // plane
+                var planeGeo = new THREE.PlaneGeometry(1.5, 1.5);
+                var plane = new THREE.Mesh(planeGeo, material);
+                plane.position.x = 1;
+                scene.add(plane);
+                
+                // triangle
+                var triGeo = new THREE.Geometry();
+                triGeo.vertices = [new THREE.Vector3(0, -0.8, 0),
+                        new THREE.Vector3(-2, -0.8, 0), new THREE.Vector3(-1, 0.8, 0)];
+                triGeo.faces.push(new THREE.Face3(0, 2, 1));
+                var triangle = new THREE.Mesh(triGeo, material);
+                scene.add(triangle);
+                
+                renderer.render(scene, camera);
+            }
+        </script>
+    </head>
+    
+    <body onload="init()">
+        <canvas id="mainCanvas" width="400px" height="300px" ></canvas>
+    </body>
 </html>
